@@ -114,4 +114,15 @@ RSpec.describe 'The items API' do
     expect(item.name).to eq('Toothbrush')
     expect(item.description).to eq('Helps fight tooth decay')
   end
+
+  it "can destory an item" do
+    item = create(:item)
+    expect(Item.count).to eq(1)
+
+    delete "/api/v1/items/#{item.id}"
+
+    expect(response).to be_successful
+    expect(Item.count).to eq(0)
+    expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
 end
