@@ -12,9 +12,19 @@ class Api::V1::ItemsController < ApplicationController
     render json: @merchant.items.create(item_params)
   end
 
+  def update
+    if Merchant.find_by(id: params[:item][:merchant_id]).nil?
+      render status: 400
+    else
+      @item = Item.find(params[:id].to_i)
+      @item.update(item_params)
+      render json: ItemSerializer.new(@item)
+    end
+  end
+
 private
 
   def item_params
-    params.require(:item).permit(:name, :description, :unit_price)
+    params.require(:item).permit(:name, :description, :unit_price, :merchant_id)
   end
 end
