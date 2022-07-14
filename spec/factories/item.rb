@@ -4,6 +4,6 @@ FactoryBot.define do
     description { Faker::Lorem.paragraph }
     unit_price { Faker::Number.within(range: 1..10) }
 
-    merchant_id factory: :merchant
+    association :merchant, factory: :merchant
   end
 end
