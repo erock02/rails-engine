@@ -16,7 +16,6 @@ RSpec.describe 'The merchants API' do
 
     merchants.each do |merchant|
       expect(merchant).to have_key(:id)
-      # expect(merchant[:id]).to be_an(Integer)
 
       expect(merchant).to have_key(:attributes)
       expect(merchant[:attributes][:name]).to be_a(String)
@@ -36,11 +35,8 @@ RSpec.describe 'The merchants API' do
 
     expect(response).to be_successful
     expect(response.status).to eq(200)
-    # expect(merchant.count).to eq(1)
 
       expect(merchant).to have_key(:id)
-      # expect(merchant[:id]).to be_an(Integer)
-
       expect(merchant).to have_key(:attributes)
       expect(merchant[:attributes][:name]).to be_a(String)
 

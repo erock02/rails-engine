@@ -16,7 +16,6 @@ RSpec.describe 'The items API' do
 
     items.each do |item|
       expect(item).to have_key(:id)
-      # expect(item[:id]).to be_an(Integer)
 
       expect(item).to have_key(:attributes)
       expect(item[:attributes][:name]).to be_a(String)
@@ -36,14 +35,34 @@ RSpec.describe 'The items API' do
 
     expect(response).to be_successful
     expect(response.status).to eq(200)
-    # expect(item.count).to eq(1)
-
-      expect(item).to have_key(:id)
-      # expect(item[:id]).to be_an(Integer)
-
-      expect(item).to have_key(:attributes)
-      expect(item[:attributes][:name]).to be_a(String)
+    expect(item).to have_key(:id)
+    expect(item).to have_key(:attributes)
+    expect(item[:attributes][:name]).to be_a(String)
 
       expect(item[:attributes]).to_not have_key(:created_at)
+  end
+
+  it 'sends an item to be created' do
+    merchant1 = create(:merchant)
+
+    item_params = ({
+                name: 'Toothbrush',
+                description: 'Helps fight tooth decay',
+                unit_price: 4,
+                merchant_id: merchant1.id
+              })
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+      created_item = Item.last
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      expect(created_item.name).to eq(item_params[:name])
+      expect(created_item.description).to eq(item_params[:description])
+      expect(created_item.unit_price).to eq(item_params[:unit_price])
+      expect(created_item.merchant_id).to eq(item_params[:merchant_id])
   end
 end
