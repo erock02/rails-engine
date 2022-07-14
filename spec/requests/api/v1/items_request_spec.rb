@@ -48,7 +48,7 @@ RSpec.describe 'The items API' do
     item_params = ({
                 name: 'Toothbrush',
                 description: 'Helps fight tooth decay',
-                unit_price: 4,
+                unit_price: 4.0,
                 merchant_id: merchant1.id
               })
       headers = {"CONTENT_TYPE" => "application/json"}
@@ -64,5 +64,54 @@ RSpec.describe 'The items API' do
       expect(created_item.description).to eq(item_params[:description])
       expect(created_item.unit_price).to eq(item_params[:unit_price])
       expect(created_item.merchant_id).to eq(item_params[:merchant_id])
+  end
+
+  it "can update an existing item" do
+    merchant1 = create(:merchant)
+    id = create(:item).id
+    previous_name = Item.last.name
+    previous_description = Item.last.description
+    previous_price = Item.last.unit_price
+    item_params = ({
+                name: 'Toothbrush',
+                description: 'Helps fight tooth decay',
+                unit_price: 4.0,
+                merchant_id: merchant1.id
+              })
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
+    item = Item.find_by(id: id)
+
+    expect(response).to be_successful
+    expect(item.name).to_not eq(previous_name)
+    expect(item.description).to_not eq(previous_description)
+    expect(item.unit_price).to_not eq(previous_price)
+    expect(item.name).to eq('Toothbrush')
+    expect(item.description).to eq('Helps fight tooth decay')
+    expect(item.unit_price).to eq(4.0)
+  end
+
+  it "can update an existing item with partial data" do
+    merchant1 = create(:merchant)
+    id = create(:item).id
+    previous_name = Item.last.name
+    previous_description = Item.last.description
+    previous_price = Item.last.unit_price
+    item_params = ({
+                name: 'Toothbrush',
+                description: 'Helps fight tooth decay',
+                merchant_id: merchant1.id
+              })
+    headers = {"CONTENT_TYPE" => "application/json"}
+
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({item: item_params})
+    item = Item.find_by(id: id)
+
+    expect(response).to be_successful
+    expect(item.name).to_not eq(previous_name)
+    expect(item.description).to_not eq(previous_description)
+    expect(item.name).to eq('Toothbrush')
+    expect(item.description).to eq('Helps fight tooth decay')
   end
 end
