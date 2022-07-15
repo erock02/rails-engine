@@ -61,4 +61,21 @@ RSpec.describe 'The merchants API' do
       expect(item[:attributes][:merchant_id]).to be_a(Integer)
     end
   end
+
+  it 'finds a merchant by name' do
+    create_list(:merchant, 3)
+
+    get "/api/v1/merchants/find?name=#{Merchant.last.name[0, 1]}"
+
+    response_body = JSON.parse(response.body, symbolize_names: true)
+
+    merchant = response_body[:data]
+
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+
+    expect(merchant).to have_key(:attributes)
+    expect(merchant[:attributes][:name]).to eq(Merchant.last.name)
+  end
+
 end
