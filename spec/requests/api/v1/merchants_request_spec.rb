@@ -63,7 +63,7 @@ RSpec.describe 'The merchants API' do
   end
 
   it 'finds a merchant by name' do
-    create_list(:merchant, 3)
+    create_list(:merchant, 1)
 
     get "/api/v1/merchants/find?name=#{Merchant.last.name[0, 1]}"
 
