@@ -146,7 +146,7 @@ RSpec.describe 'The items API' do
   end
 
   it 'finds items by name' do
-    create_list(:item, 3)
+    create_list(:item, 1)
 
     get "/api/v1/items/find_all?name=#{Item.last.name[0, 1]}"
 
