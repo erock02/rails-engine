@@ -9,11 +9,11 @@ class Api::V1::ItemsController < ApplicationController
 
   def create
     @merchant = Merchant.find(params[:item][:merchant_id])
-    render json: @merchant.items.create(item_params)
+    render json: ItemSerializer.new(@merchant.items.create(item_params)), status: :created
   end
 
   def update
-    if Merchant.find_by(id: params[:item][:merchant_id]).nil?
+    if params[:item][:merchant_id] && Merchant.find_by(id: params[:item][:merchant_id]).nil?
       render status: 400
     else
       @item = Item.find(params[:id].to_i)
