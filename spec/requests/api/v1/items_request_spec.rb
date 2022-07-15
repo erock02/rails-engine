@@ -58,7 +58,7 @@ RSpec.describe 'The items API' do
       created_item = Item.last
 
       expect(response).to be_successful
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(201)
 
       expect(created_item.name).to eq(item_params[:name])
       expect(created_item.description).to eq(item_params[:description])
@@ -124,5 +124,22 @@ RSpec.describe 'The items API' do
     expect(response).to be_successful
     expect(Item.count).to eq(0)
     expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it 'sends an items merchant' do
+    create_list(:item, 1)
+
+    get "/api/v1/items/#{Item.first.id}/merchant"
+
+    response_body = JSON.parse(response.body, symbolize_names: true)
+
+    merchant = response_body[:data]
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+
+    expect(merchant).to have_key(:id)
+    expect(merchant).to have_key(:attributes)
+    expect(merchant[:attributes][:name]).to be_a(String)
+
   end
 end
