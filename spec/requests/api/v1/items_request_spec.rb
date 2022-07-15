@@ -38,7 +38,9 @@ RSpec.describe 'The items API' do
     expect(item).to have_key(:id)
     expect(item).to have_key(:attributes)
     expect(item[:attributes][:name]).to be_a(String)
-
+    expect(item[:attributes][:description]).to be_a(String)
+    expect(item[:attributes][:unit_price]).to be_a(Float)
+    expect(item[:attributes][:merchant_id]).to be_a(Integer)
       expect(item[:attributes]).to_not have_key(:created_at)
   end
 
@@ -140,6 +142,25 @@ RSpec.describe 'The items API' do
     expect(merchant).to have_key(:id)
     expect(merchant).to have_key(:attributes)
     expect(merchant[:attributes][:name]).to be_a(String)
+
+  end
+
+  it 'finds items by name' do
+    create_list(:item, 3)
+
+    get "/api/v1/items/find_all?name=#{Item.last.name[0, 1]}"
+
+    response_body = JSON.parse(response.body, symbolize_names: true)
+
+    items = response_body[:data]
+
+    expect(response).to be_successful
+    expect(response.status).to eq(200)
+
+    expect(items[0][:attributes][:name]).to be_a(String)
+    expect(items[0][:attributes][:description]).to be_a(String)
+    expect(items[0][:attributes][:unit_price]).to be_a(Float)
+    expect(items[0][:attributes][:merchant_id]).to be_a(Integer)
 
   end
 end
