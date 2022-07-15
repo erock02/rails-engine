@@ -1,24 +1,19 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+Ruby version
+* Ruby v 2.7.4
+* Rails v. 5.2.6
 
-* Ruby version
+Database creation
 
-* System dependencies
+In the terminal, first run the command
+Rails db:{drop,create,migrate,seed}
+After disregarding all the PG warnings, run 
+rails db:schema:dump
 
-* Configuration
+How to run the test suite
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+In the terminal, run the command
+Bundle exec rspec
+To run the entire test suite
